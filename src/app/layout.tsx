@@ -1,12 +1,10 @@
 import Navbar from "@/components/navbar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { DATA } from "@/data/resume";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { FlickeringGrid } from "@/components/magicui/flickering-grid";
 
 const geist = Geist({
   subsets: ["latin"],
@@ -21,17 +19,14 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(DATA.url),
   title: {
-    default: DATA.name,
-    template: `%s | ${DATA.name}`,
+    default: "Gabriel — Web Designer",
+    template: "%s | Gabriel",
   },
-  description: DATA.description,
+  description: "Web designer crafting beautiful digital experiences",
   openGraph: {
-    title: `${DATA.name}`,
-    description: DATA.description,
-    url: DATA.url,
-    siteName: `${DATA.name}`,
+    title: "Gabriel — Web Designer",
+    description: "Web designer crafting beautiful digital experiences",
     locale: "en_US",
     type: "website",
   },
@@ -47,12 +42,8 @@ export const metadata: Metadata = {
     },
   },
   twitter: {
-    title: `${DATA.name}`,
+    title: "Gabriel — Web Designer",
     card: "summary_large_image",
-  },
-  verification: {
-    google: "",
-    yandex: "",
   },
 };
 
@@ -62,33 +53,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className="dark" suppressHydrationWarning>
       <body
         className={cn(
-          "min-h-screen bg-background font-sans antialiased relative",
+          "min-h-screen bg-background font-sans antialiased relative select-none",
           geist.variable,
           geistMono.variable
         )}
       >
-        <ThemeProvider attribute="class" defaultTheme="light">
+        <ThemeProvider attribute="class" defaultTheme="dark" forcedTheme="dark">
           <TooltipProvider delayDuration={0}>
-            <div className="absolute inset-0 top-0 left-0 right-0 h-[100px] overflow-hidden z-0">
-              <FlickeringGrid
-                className="h-full w-full"
-                squareSize={2}
-                gridGap={2}
-                style={{
-                  maskImage: "linear-gradient(to bottom, black, transparent)",
-                  WebkitMaskImage: "linear-gradient(to bottom, black, transparent)",
-                }}
-              />
-            </div>
             <div className="relative z-10 max-w-2xl mx-auto py-12 pb-24 sm:py-24 px-6">
               {children}
             </div>
             <Navbar />
           </TooltipProvider>
         </ThemeProvider>
+        <div className="pointer-events-none bg-black fixed bottom-0 left-0 h-28 w-full" style={{ maskImage: "linear-gradient(transparent, #000000)", WebkitMaskImage: "linear-gradient(transparent, #000000)" }} />
       </body>
     </html>
   );

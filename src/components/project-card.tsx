@@ -1,139 +1,127 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
-
-import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { ArrowUpRight } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
-import Markdown from "react-markdown";
 
-function ProjectImage({ src, alt }: { src: string; alt: string }) {
-  const [imageError, setImageError] = useState(false);
-
-  if (!src || imageError) {
-    return <div className="w-full h-48 bg-muted" />;
-  }
-
-  return (
-    <img
-      src={src}
-      alt={alt}
-      className="w-full h-48 object-cover"
-      onError={() => setImageError(true)}
-    />
-  );
-}
+const GRADIENTS = [
+  "from-purple-900/40 to-zinc-900",
+  "from-blue-900/40 to-zinc-900",
+  "from-emerald-900/40 to-zinc-900",
+  "from-rose-900/40 to-zinc-900",
+];
 
 interface Props {
   title: string;
-  href?: string;
   description: string;
   dates: string;
-  tags: readonly string[];
-  link?: string;
+  tags?: string[];
   image?: string;
   video?: string;
-  links?: readonly {
-    icon: React.ReactNode;
-    type: string;
-    href: string;
-  }[];
+  links?: { type: string; href: string; icon?: React.ReactNode }[];
+  href?: string;
   className?: string;
+  index?: number;
 }
 
 export function ProjectCard({
   title,
-  href,
   description,
   dates,
-  tags,
-  link,
+  tags = [],
   image,
   video,
-  links,
+  links = [],
+  href,
   className,
+  index = 0,
 }: Props) {
+  const hasMedia = !!(video || (image && image.length > 0));
+  const gradient = GRADIENTS[index % GRADIENTS.length];
+
   return (
     <div
       className={cn(
-        "flex flex-col h-full border border-border rounded-xl overflow-hidden hover:ring-2 cursor-pointer hover:ring-muted transition-all duration-200",
+        "group flex flex-col overflow-hidden rounded-2xl bg-zinc-800/30 border-2 border-transparent hover:border-zinc-500 hover:bg-zinc-900 transition-all duration-300 h-full",
         className
       )}
     >
-      <div className="relative shrink-0">
-        <Link
-          href={href || "#"}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="block"
-        >
-          {video ? (
-            <video
-              src={video}
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="w-full h-48 object-cover"
-            />
-          ) : image ? (
-            <ProjectImage src={image} alt={title} />
-          ) : (
-            <div className="w-full h-48 bg-muted" />
-          )}
-        </Link>
-        {links && links.length > 0 && (
-          <div className="absolute top-2 right-2 flex flex-wrap gap-2">
-            {links.map((link, idx) => (
+      {/* Media / Placeholder */}
+      <div className="relative overflow-hidden">
+        {video ? (
+          <video
+            src={video}
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="w-full h-40 object-cover"
+          />
+        ) : image && image.length > 0 ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={image} alt={title} className="w-full h-40 object-cover" />
+        ) : (
+          <div className={cn("w-full h-40 bg-gradient-to-br flex items-center justify-center", gradient)}>
+            <div className="w-12 h-12 rounded-xl bg-zinc-700/50 ring-1 ring-white/10 flex items-center justify-center">
+              <svg className="w-6 h-6 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+            </div>
+          </div>
+        )}
+        {hasMedia && links.length > 0 && (
+          <div className="absolute bottom-2 right-2 flex gap-1">
+            {links.map((link) => (
               <Link
+                key={link.href}
                 href={link.href}
-                key={idx}
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={(e) => e.stopPropagation()}
+                className="inline-flex items-center gap-1 px-2 py-1 text-xs rounded-full bg-zinc-900/80 ring-1 ring-white/10 text-zinc-300 hover:text-white transition-colors"
               >
-                <Badge
-                  className="flex items-center gap-1.5 text-xs bg-black text-white hover:bg-black/90"
-                  variant="default"
-                >
-                  {link.icon}
-                  {link.type}
-                </Badge>
+                {link.type}
               </Link>
             ))}
           </div>
         )}
       </div>
-      <div className="p-6 flex flex-col gap-3 flex-1">
+
+      {/* Content */}
+      <div className="flex flex-col flex-1 p-5 gap-3">
         <div className="flex items-start justify-between gap-2">
-          <div className="flex flex-col gap-1">
-            <h3 className="font-semibold">{title}</h3>
-            <time className="text-xs text-muted-foreground">{dates}</time>
-          </div>
-          <Link
-            href={href || "#"}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
-            aria-label={`Open ${title}`}
-          >
-            <ArrowUpRight className="h-4 w-4" aria-hidden />
-          </Link>
+          <h3 className="text-base font-semibold text-white">{title}</h3>
+          {href && (
+            <Link href={href} target="_blank" rel="noopener noreferrer" className="text-zinc-500 hover:text-purple-400 transition-colors shrink-0">
+              <ExternalLink size={14} />
+            </Link>
+          )}
         </div>
-        <div className="text-xs flex-1 prose max-w-full text-pretty font-sans leading-relaxed text-muted-foreground dark:prose-invert">
-          <Markdown>{description}</Markdown>
-        </div>
-        {tags && tags.length > 0 && (
-          <div className="flex flex-wrap gap-1 mt-auto">
+        <time className="text-xs text-zinc-500">{dates}</time>
+        <p className="text-sm flex-1 text-pretty leading-relaxed text-zinc-400">{description}</p>
+
+        {/* Tags */}
+        {tags.length > 0 && (
+          <div className="flex flex-wrap gap-1.5 mt-auto pt-2">
             {tags.map((tag) => (
-              <Badge
-                key={tag}
-                className="text-[11px] font-medium border border-border h-6 w-fit px-2"
-                variant="outline"
-              >
+              <span key={tag} className="inline-flex items-center px-2 py-0.5 text-xs rounded-full bg-zinc-700/50 ring-1 ring-white/10 text-zinc-300">
                 {tag}
-              </Badge>
+              </span>
+            ))}
+          </div>
+        )}
+
+        {/* Inline links when no media */}
+        {!hasMedia && links.length > 0 && (
+          <div className="flex gap-3 mt-1">
+            {links.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-xs text-purple-400 hover:text-purple-300 transition-colors"
+              >
+                {link.type} <ExternalLink size={10} />
+              </Link>
             ))}
           </div>
         )}
@@ -141,3 +129,5 @@ export function ProjectCard({
     </div>
   );
 }
+
+export default ProjectCard;
