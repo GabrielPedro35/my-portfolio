@@ -21,6 +21,7 @@ interface Props {
   href?: string;
   className?: string;
   index?: number;
+  imageClassName?: string;
 }
 
 export function ProjectCard({
@@ -34,17 +35,28 @@ export function ProjectCard({
   href,
   className,
   index = 0,
+  imageClassName,
 }: Props) {
   const hasMedia = !!(video || (image && image.length > 0));
   const gradient = GRADIENTS[index % GRADIENTS.length];
+  const liveHref = href && href !== "#" ? href : undefined;
 
   return (
     <div
       className={cn(
-        "group flex flex-col overflow-hidden rounded-2xl bg-zinc-800/30 border-2 border-transparent hover:border-zinc-500 hover:bg-zinc-900 transition-all duration-300 h-full",
+        "group relative flex flex-col overflow-hidden rounded-2xl bg-zinc-800/30 border-2 border-transparent hover:border-zinc-500 hover:bg-zinc-900 transition-all duration-300 h-full",
         className
       )}
     >
+      {liveHref ? (
+        <a
+          href={liveHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`Open ${title}`}
+          className="absolute inset-0 z-10"
+        />
+      ) : null}
       {/* Media / Placeholder */}
       <div className="relative overflow-hidden">
         {video ? (
@@ -58,7 +70,11 @@ export function ProjectCard({
           />
         ) : image && image.length > 0 ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={image} alt={title} className="w-full h-40 object-cover" />
+          <img
+            src={image}
+            alt={title}
+            className={cn("w-full h-40 object-cover", imageClassName)}
+          />
         ) : (
           <div className={cn("w-full h-40 bg-gradient-to-br flex items-center justify-center", gradient)}>
             <div className="w-12 h-12 rounded-xl bg-zinc-700/50 ring-1 ring-white/10 flex items-center justify-center">
@@ -76,7 +92,7 @@ export function ProjectCard({
                 href={link.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 px-2 py-1 text-xs rounded-full bg-zinc-900/80 ring-1 ring-white/10 text-zinc-300 hover:text-white transition-colors"
+                className="relative z-20 inline-flex items-center gap-1 px-2 py-1 text-xs rounded-full bg-zinc-900/80 ring-1 ring-white/10 text-zinc-300 hover:text-white transition-colors"
               >
                 {link.type}
               </Link>
@@ -89,14 +105,16 @@ export function ProjectCard({
       <div className="flex flex-col flex-1 p-5 gap-3">
         <div className="flex items-start justify-between gap-2">
           <h3 className="text-base font-semibold text-white">{title}</h3>
-          {href && (
-            <Link href={href} target="_blank" rel="noopener noreferrer" className="text-zinc-500 hover:text-purple-400 transition-colors shrink-0">
+          {liveHref ? (
+            <Link href={liveHref} target="_blank" rel="noopener noreferrer" className="relative z-20 text-zinc-500 hover:text-purple-400 transition-colors shrink-0">
               <ExternalLink size={14} />
             </Link>
-          )}
+          ) : null}
         </div>
-        <time className="text-xs text-zinc-500">{dates}</time>
-        <p className="text-sm flex-1 text-pretty leading-relaxed text-zinc-400">{description}</p>
+        {dates ? <time className="text-xs text-zinc-500">{dates}</time> : null}
+        {description ? (
+          <p className="text-sm flex-1 text-pretty leading-relaxed text-zinc-400">{description}</p>
+        ) : null}
 
         {/* Tags */}
         {tags.length > 0 && (
@@ -118,7 +136,7 @@ export function ProjectCard({
                 href={link.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-xs text-purple-400 hover:text-purple-300 transition-colors"
+                className="relative z-20 inline-flex items-center gap-1 text-xs text-purple-400 hover:text-purple-300 transition-colors"
               >
                 {link.type} <ExternalLink size={10} />
               </Link>

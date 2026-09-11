@@ -32,14 +32,12 @@ export default function ContactSection() {
           Get in Touch
         </h2>
         <p className="mx-auto max-w-lg text-zinc-400 text-balance leading-relaxed">
-          Want to chat? Just shoot me a dm{" "}
+          Want to chat? Just shoot me an email{" "}
           <Link
-            href={DATA.contact.social.X.url}
-            target="_blank"
-            rel="noopener noreferrer"
+            href={`mailto:${DATA.contact.email}`}
             className="text-purple-400 hover:text-purple-300 underline underline-offset-4 decoration-purple-500/40 hover:decoration-purple-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500/50 rounded-sm"
           >
-            with a direct question on twitter
+            {DATA.contact.email}
           </Link>{" "}
           and I&apos;ll respond whenever I can. I will ignore all soliciting.
         </p>

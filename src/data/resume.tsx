@@ -1,6 +1,6 @@
 import React from "react";
-import { Icons } from "@/components/icons";
 import { HomeIcon, NotebookIcon } from "lucide-react";
+import { FaEnvelope, FaGithub, FaInstagram } from "react-icons/fa6";
 import { ReactLight } from "@/components/ui/svgs/reactLight";
 
 export const DATA = {
@@ -31,43 +31,25 @@ export const DATA = {
     { href: "/blog", icon: NotebookIcon, label: "Blog" },
   ],
   contact: {
-    email: "gabriel@gabriel.design",
+    email: "witxdth@gmail.com",
     tel: "",
     social: {
       GitHub: {
         name: "GitHub",
-        url: "https://github.com/gabriel",
-        icon: Icons.github,
+        url: "https://github.com/GabrielPedro35",
+        icon: FaGithub,
         navbar: true,
       },
-      LinkedIn: {
-        name: "LinkedIn",
-        url: "https://linkedin.com/in/gabriel",
-        icon: Icons.linkedin,
+      Instagram: {
+        name: "Instagram",
+        url: "https://www.instagram.com/gblecev/",
+        icon: FaInstagram,
         navbar: true,
-      },
-      X: {
-        name: "X",
-        url: "https://twitter.com/gabriel",
-        icon: Icons.x,
-        navbar: true,
-      },
-      Dribbble: {
-        name: "Dribbble",
-        url: "https://dribbble.com/gabriel",
-        icon: Icons.globe,
-        navbar: true,
-      },
-      Behance: {
-        name: "Behance",
-        url: "https://behance.net/gabriel",
-        icon: Icons.globe,
-        navbar: false,
       },
       email: {
         name: "Send Email",
-        url: "mailto:gabriel@gabriel.design",
-        icon: Icons.email,
+        url: "mailto:witxdth@gmail.com",
+        icon: FaEnvelope,
         navbar: false,
       },
     },
@@ -110,75 +92,47 @@ export const DATA = {
   ],
   projects: [
     {
-      title: "Lumina Design System",
-      href: "#",
-      dates: "2025",
+      title: "Kiwimi Studios",
+      href: "https://kiwimi.co/",
+      dates: "",
       active: true,
-      description:
-        "A comprehensive design system built in Figma with 200+ components, dark/light modes, and full developer handoff documentation.",
-      technologies: ["Figma", "Tokens Studio", "Storybook"],
-      links: [
-        {
-          type: "Live",
-          href: "#",
-          icon: <Icons.globe className="size-3" />,
-        },
-      ],
-      image: "",
+      description: "Been working for this company for 7 months.",
+      technologies: [],
+      links: [],
+      image: "/kiwimi.png",
       video: "",
     },
     {
-      title: "Zephyr Landing Page",
-      href: "#",
-      dates: "2024",
+      title: "Turkish Airlines",
+      href: "https://turkish-airlines-mocha.vercel.app/",
+      dates: "",
       active: true,
-      description:
-        "High-converting SaaS landing page with custom animations, Lottie illustrations, and a 94% Lighthouse score.",
-      technologies: ["Framer", "Lottie", "Tailwind CSS"],
-      links: [
-        {
-          type: "Live",
-          href: "#",
-          icon: <Icons.globe className="size-3" />,
-        },
-      ],
-      image: "",
+      description: "A demo site for Turkish Airlines.",
+      technologies: [],
+      links: [],
+      image: "/turkish-airlines.png",
       video: "",
     },
     {
-      title: "Nova Dashboard",
-      href: "#",
-      dates: "2024",
+      title: "McLaren P1 Showcase",
+      href: "https://mclaren-p1-showcase-beta.vercel.app/",
+      dates: "",
       active: true,
-      description:
-        "Admin dashboard UI for a fintech startup featuring 50+ chart components, dark mode, and WCAG 2.1 AA accessibility.",
-      technologies: ["Figma", "React", "Recharts"],
-      links: [
-        {
-          type: "Live",
-          href: "#",
-          icon: <Icons.globe className="size-3" />,
-        },
-      ],
-      image: "",
+      description: "A project to learn scroll animations.",
+      technologies: [],
+      links: [],
+      image: "/mclaren-p1.png",
       video: "",
     },
     {
-      title: "Aria Mobile App",
-      href: "#",
-      dates: "2023",
+      title: "Virello",
+      href: "https://virello-smoky.vercel.app/",
+      dates: "",
       active: true,
-      description:
-        "End-to-end mobile app design for a wellness startup — from wireframes to polished Figma prototype with custom micro-interactions.",
-      technologies: ["Figma", "Principle", "Protopie"],
-      links: [
-        {
-          type: "Live",
-          href: "#",
-          icon: <Icons.globe className="size-3" />,
-        },
-      ],
-      image: "",
+      description: "A site made for the product Virello.",
+      technologies: [],
+      links: [],
+      image: "/virello.png",
       video: "",
     },
   ],

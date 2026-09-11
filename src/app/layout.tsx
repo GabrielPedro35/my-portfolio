@@ -1,4 +1,5 @@
 import Navbar from "@/components/navbar";
+import PageLoader from "@/components/page-loader";
 import { ThemeProvider } from "@/components/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
@@ -61,6 +62,7 @@ export default function RootLayout({
           geistMono.variable
         )}
       >
+        <PageLoader />
         <ThemeProvider attribute="class" defaultTheme="dark" forcedTheme="dark">
           <TooltipProvider delayDuration={0}>
             <div className="relative z-10 max-w-2xl mx-auto py-12 pb-24 sm:py-24 px-6">

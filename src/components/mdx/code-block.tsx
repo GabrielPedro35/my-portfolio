@@ -68,14 +68,14 @@ export function CodeBlock({ children, ...props }: CodeBlockProps) {
   };
 
   return (
-    <div className="group relative rounded-xl overflow-hidden border border-border">
+    <div className="group relative rounded-2xl overflow-hidden ring-1 ring-white/10 bg-zinc-900/80">
       <pre
         ref={preRef}
         {...props}
         className={cn("p-0! m-0! overflow-x-auto", props.className)}
       >
         {title && (
-          <div className="p-3 text-xs font-medium border-b border-border rounded-t-xl bg-muted/50 text-foreground">
+          <div className="p-3 text-xs font-medium border-b border-white/10 rounded-t-2xl bg-zinc-800/50 text-zinc-300">
             {title}
           </div>
         )}
@@ -84,7 +84,7 @@ export function CodeBlock({ children, ...props }: CodeBlockProps) {
           onClick={handleCopy}
           variant="outline"
           size="icon"
-          className={cn("absolute size-8 text-primary cursor-pointer right-3 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity rounded-md border border-border shadow-none", title ? "top-13" : "top-3", props.className)}
+          className={cn("absolute size-8 text-purple-400 cursor-pointer right-3 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity rounded-md border border-white/10 bg-zinc-900/80 shadow-none hover:bg-zinc-800", title ? "top-13" : "top-3", props.className)}
           aria-label="Copy code"
         >
           {copied ? <Check className="size-4" /> : <Copy className="size-4" />}
