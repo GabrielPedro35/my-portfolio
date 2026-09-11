@@ -1,0 +1,82 @@
+---
+title: "How I built the McLaren P1 scroll animation"
+publishedAt: "2026-09-11"
+updatedAt: "2026-09-11"
+author: "Gabriel"
+summary: "I wanted those cool scroll sites, started with a bad delivery-van idea, then turned a McLaren video into frames and wired it to the scrollbar."
+image: "/mclaren-p1.png"
+---
+
+One day I was curious about sites with those cool scroll animations. You know the ones — you drag the page a little and the whole scene just *plays*, like the website is a video but you are the timeline.
+
+So I sat there thinking for a while and my first idea came to my mind. It was a simple delivery package from a car that dropped after the car came close to the 4th wall. Like the van drives at you, then a box falls out. I even liked it for a minute. Then I realized the idea was simply too bad. Nobody is scrolling a portfolio to watch a cardboard box.
+
+I decided to improve my idea and came up with a car. Not a van. An actual car. And not just any car — if you are going to spend weeks staring at frames, it might as well be a McLaren P1.
+
+So I began thinking, what if I made it *like* animations, not a 3D model I have to rig, not some CSS transform that looks cheap. I found a video and implemented it into frames. After that it stopped being a daydream and became a real site.
+
+## Turning a video into a website
+
+The trick is dumb when you say it out loud: a video is already a bunch of pictures. If I cut the clip into stills, I can draw one still per scroll position and it *feels* like the car is moving because you are moving.
+
+I exported two clips as WebP sequences:
+
+- clip 1 lives in `/frames/` — **191** frames, named `frame_0000.webp` up to `frame_0190.webp`
+- clip 2 lives in `/frames2/` — **188** frames, named with a five-digit pad (`frame_00000.webp`) because that export came out that way and I just left it
+
+WebP kept the files small enough that I could preload them without the tab dying. JPEG would have been heavier. A real `<video>` scrubbed with `currentTime` looks tempting, but browsers are messy with seeking — you get stutter, keyframe jumps, and it never feels locked to the scrollbar. Frames on a canvas do.
+
+## Mapping scroll to a frame
+
+This is the whole engine. I did not use GSAP, ScrollTrigger, Lenis, none of that. Next.js 16, React 19, a 2D canvas, and a couple of constants.
+
+Each frame “owns” **48 pixels** of scroll:
+
+```ts
+export const TOTAL_FRAMES_1 = 191;
+export const TOTAL_FRAMES_2 = 188;
+export const FRAME_PIXELS_1 = 48;
+export const FRAME_PIXELS_2 = 48;
+
+export const FRAME_SCROLL_HEIGHT_1 = (TOTAL_FRAMES_1 - 1) * FRAME_PIXELS_1;
+export const FRAME_SCROLL_HEIGHT_2 = (TOTAL_FRAMES_2 - 1) * FRAME_PIXELS_2;
+```
+
+So the first sequence is `(191 - 1) * 48 = 9120px` tall. The second is `8976px`. The canvas itself is `position: sticky; top: 0; height: 100vh`. You are not scrolling the picture — you are scrolling a tall empty column, and the picture stays pinned while the math picks a frame.
+
+On every animation frame I do roughly this:
+
+1. read how far the sticky section has been scrolled
+2. `progress = clamp(scrolled / FRAME_SCROLL_HEIGHT)` so it stays between 0 and 1
+3. `index = round(progress * (TOTAL_FRAMES - 1))`
+4. `drawImage` that frame on the canvas, scaled like `object-fit: cover` (min of width/height ratios, centered)
+
+If the same index is already on screen I skip the draw. No point painting 191 copies of the same still just because the wheel wiggled a pixel.
+
+Hero copy fades and blurs on that same progress, so the title gets out of the way as the car starts moving. The second clip is the same idea in `SecondAnimation` — its own canvas, its own 188 frames, its own sticky well.
+
+## Preloading, because 379 pictures is a lot
+
+If you draw frame 80 before it has loaded you get a blank canvas and the whole illusion dies. So there is a `preloadFrames(clip)` helper that creates `Image` objects, kicks `src`, and caches them.
+
+The loading screen waits on **clip 1** and shows a percentage bar. When that batch is ready it lets you in, then quietly warms **clip 2** in the background so the second sequence is already in memory by the time you get there. That split mattered — blocking on all 379 WebPs made the first paint feel like the site was broken.
+
+Resize just resets the canvas width/height to the element size and redraws the current frame. Cover-fit again, so the P1 never letterboxes.
+
+## Smooth scroll without a library
+
+Native wheel on a frame sequence feels crunchy. I wrote a small custom smooth-scroll helper instead of pulling Lenis. It eases the target scroll position so the index does not jump 8 frames at a time when you flick the wheel. Combined with the 48px-per-frame spacing, one “tick” of the wheel is a few frames, not a teleport.
+
+Framer Motion is only on the overlay UI — navbar, logos, that kind of thing. The car itself is not a motion component. It is pixels on a canvas. That is the point.
+
+## What I actually learned
+
+Scroll animation is not magic. It is:
+
+- a video you like
+- a folder of WebPs
+- a sticky canvas
+- `progress = scrolled / ((frames - 1) * pixelsPerFrame)`
+- `drawImage`
+
+The delivery-van idea was bad. The P1 idea was the same technique with a car worth looking at. If you want to see it running, the live site is [the McLaren P1 showcase](https://mclaren-p1-showcase-beta.vercel.app/).

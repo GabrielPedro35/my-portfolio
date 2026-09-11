@@ -1,0 +1,54 @@
+{
+  "features": [
+    {
+      "id": "pnpm-allow-builds",
+      "name": "Allow pnpm native build scripts so pnpm dev starts",
+      "passes": true
+    },
+    {
+      "id": "github-nav-url",
+      "name": "Point GitHub navbar profile to GabrielPedro35",
+      "passes": true
+    },
+    {
+      "id": "react-icons-socials",
+      "name": "Replace custom social SVGs with react-icons",
+      "passes": true
+    },
+    {
+      "id": "project-card-images",
+      "name": "Attach screenshots to Kiwimi / Turkish Airlines / McLaren / Virello cards",
+      "passes": true
+    },
+    {
+      "id": "virello-crop",
+      "name": "Zoom Virello card so brown frame is cropped out",
+      "passes": true
+    },
+    {
+      "id": "virello-image-replace",
+      "name": "Replace Virello screenshot with the new cropped PNG",
+      "passes": true
+    },
+    {
+      "id": "remove-unused-socials",
+      "name": "Remove LinkedIn Behance Dribbble Twitter from socials and navbar",
+      "passes": true
+    },
+    {
+      "id": "add-instagram",
+      "name": "Add Instagram to navbar and Find me online",
+      "passes": true
+    },
+    {
+      "id": "contact-email",
+      "name": "Set Get in Touch email to witxdth@gmail.com",
+      "passes": true
+    },
+    {
+      "id": "remove-available-for-work",
+      "name": "Remove Available for work badge from homepage",
+      "passes": true
+    }
+  ]
+}
